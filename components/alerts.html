@@ -1,0 +1,71 @@
+<header class="view-header">
+    <h1 class="view-title">Active Alerts</h1>
+    <p class="view-subtitle">High priority security events requiring attention.</p>
+</header>
+
+<div id="alerts-list" class="alerts-container">
+    <!-- Alert 1 -->
+    <div class="card alert-card" data-alert-id="1">
+        <div class="severity-indicator severity-high"></div>
+        <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                <span class="badge badge-danger">High Severity</span>
+                <span style="font-size: 12px; color: var(--text-secondary);">2 min ago</span>
+            </div>
+            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Unrecognized Person Detected</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">
+                A person not in your recognized database was spotted at the <strong>Front Door</strong>.
+            </p>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-outline dismiss-alert" style="padding: 6px 16px; font-size: 13px;">Dismiss</button>
+                <button class="btn btn-primary" style="padding: 6px 16px; font-size: 13px;">View Camera</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert 2 -->
+    <div class="card alert-card" data-alert-id="2">
+        <div class="severity-indicator severity-medium"></div>
+        <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                <span class="badge badge-warning" style="background: rgba(245, 158, 11, 0.15); color: var(--warning);">Medium Severity</span>
+                <span style="font-size: 12px; color: var(--text-secondary);">14 min ago</span>
+            </div>
+            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Motion in Restricted Zone</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">
+                Unexpected motion detected in the <strong>Backyard</strong> zone during armed hours.
+            </p>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-outline dismiss-alert" style="padding: 6px 16px; font-size: 13px;">Dismiss</button>
+                <button class="btn btn-primary" style="padding: 6px 16px; font-size: 13px;">View Camera</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert 3 -->
+    <div class="card alert-card" data-alert-id="3">
+        <div class="severity-indicator severity-low"></div>
+        <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                <span class="badge badge-cyan">Low Severity</span>
+                <span style="font-size: 12px; color: var(--text-secondary);">1 hr ago</span>
+            </div>
+            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Camera Signal Weak</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">
+                The <strong>Side Gate</strong> camera is experiencing intermittent connectivity issues.
+            </p>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-outline dismiss-alert" style="padding: 6px 16px; font-size: 13px;">Dismiss</button>
+                <button class="btn btn-primary" style="padding: 6px 16px; font-size: 13px;">Troubleshoot</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="alerts-empty" class="card" style="text-align: center; padding: 64px 24px; display: none;">
+    <div style="width: 64px; height: 64px; background: rgba(34, 197, 94, 0.15); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    </div>
+    <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">All clear</h2>
+    <p style="color: var(--text-secondary);">No active alerts. Your home is secure.</p>
+</div>

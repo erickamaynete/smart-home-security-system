@@ -1,0 +1,170 @@
+<header class="view-header">
+    <h1 class="view-title">System Overview</h1>
+    <p class="view-subtitle">All systems operational. 4 cameras active.</p>
+</header>
+
+<div class="stat-grid">
+    <div class="card stat-card">
+        <span class="label">Cameras Online</span>
+        <div class="value">4/4</div>
+    </div>
+    <div class="card stat-card">
+        <span class="label">Motion Events Today</span>
+        <div class="value">7</div>
+    </div>
+    <div class="card stat-card">
+        <span class="label">System Status</span>
+        <div id="dash-status-value" class="value" style="color: var(--success);">ARMED</div>
+    </div>
+    <div class="card stat-card">
+        <span class="label">Last Activity</span>
+        <div id="last-activity-value" class="value">2 min ago</div>
+    </div>
+</div>
+
+<div class="camera-grid">
+    <!-- Camera 1 -->
+    <div class="card camera-feed-card" data-camera="front-door" data-video="frontdoor.mp4">
+        <div class="feed-display">
+            <video autoplay muted loop playsinline class="feed-video">
+                <source src="frontdoor.mp4" type="video/mp4">
+            </video>
+            <div class="feed-overlay-top">
+                <div class="live-indicator">
+                    <span class="dot-pulse"></span>
+                    <span class="badge badge-danger" style="background: rgba(255,76,76,0.2); padding: 2px 6px;">LIVE</span>
+                </div>
+                <span class="feed-timestamp">2026-05-13 15:50:24</span>
+            </div>
+        </div>
+        <div class="feed-info">
+            <div>
+                <h3 style="font-size: 14px; font-weight: 600;">Front Door</h3>
+                <span class="badge badge-success motion-status">Clear</span>
+            </div>
+            <div class="feed-actions" style="display: flex; gap: 12px;">
+                <button class="zoom-btn" title="Zoom In">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path></svg>
+                </button>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Camera 2 -->
+    <div class="card camera-feed-card" data-camera="backyard" data-video="backyard.mp4">
+        <div class="feed-display">
+            <video autoplay muted loop playsinline class="feed-video">
+                <source src="backyard.mp4" type="video/mp4">
+            </video>
+            <div class="feed-overlay-top">
+                <div class="live-indicator">
+                    <span class="dot-pulse"></span>
+                    <span class="badge badge-danger" style="background: rgba(255,76,76,0.2); padding: 2px 6px;">LIVE</span>
+                </div>
+                <span class="feed-timestamp">2026-05-13 15:50:24</span>
+            </div>
+        </div>
+        <div class="feed-info">
+            <div>
+                <h3 style="font-size: 14px; font-weight: 600;">Backyard</h3>
+                <span class="badge badge-success motion-status">Clear</span>
+            </div>
+            <div class="feed-actions" style="display: flex; gap: 12px;">
+                <button class="zoom-btn" title="Zoom In">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path></svg>
+                </button>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera 3 -->
+    <div class="card camera-feed-card" data-camera="garage" data-video="garage.mp4">
+        <div class="feed-display">
+            <video autoplay muted loop playsinline class="feed-video">
+                <source src="garage.mp4" type="video/mp4">
+            </video>
+            <div class="feed-overlay-top">
+                <div class="live-indicator">
+                    <span class="dot-pulse"></span>
+                    <span class="badge badge-danger" style="background: rgba(255,76,76,0.2); padding: 2px 6px;">LIVE</span>
+                </div>
+                <span class="feed-timestamp">2026-05-13 15:50:24</span>
+            </div>
+        </div>
+        <div class="feed-info">
+            <div>
+                <h3 style="font-size: 14px; font-weight: 600;">Garage</h3>
+                <span class="badge badge-success motion-status">Clear</span>
+            </div>
+            <div class="feed-actions" style="display: flex; gap: 12px;">
+                <button class="zoom-btn" title="Zoom In">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path></svg>
+                </button>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera 4 -->
+    <div class="card camera-feed-card" data-camera="side-gate" data-video="sidegate.mp4">
+        <div class="feed-display">
+            <video autoplay muted loop playsinline class="feed-video">
+                <source src="sidegate.mp4" type="video/mp4">
+            </video>
+            <div class="feed-overlay-top">
+                <div class="live-indicator">
+                    <span class="dot-pulse"></span>
+                    <span class="badge badge-danger" style="background: rgba(255,76,76,0.2); padding: 2px 6px;">LIVE</span>
+                </div>
+                <span class="feed-timestamp">2026-05-13 15:50:24</span>
+            </div>
+        </div>
+        <div class="feed-info">
+            <div>
+                <h3 style="font-size: 14px; font-weight: 600;">Side Gate</h3>
+                <span class="badge badge-success motion-status">Clear</span>
+            </div>
+            <div class="feed-actions" style="display: flex; gap: 12px;">
+                <button class="zoom-btn" title="Zoom In">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path></svg>
+                </button>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 style="font-size: 18px; margin-bottom: 20px; color: var(--text-secondary);">Quick Actions</h2>
+<div class="quick-actions">
+    <button id="lock-doors" class="action-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <span>Lock Doors</span>
+    </button>
+    <button id="trigger-alarm" class="action-btn" style="border-color: rgba(255,76,76,0.3);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <span style="color: var(--danger);">Sound Alarm</span>
+    </button>
+    <button id="request-patrol" class="action-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+        <span>Request Patrol</span>
+    </button>
+</div>
+
+<style>
+.view-header {
+    margin-bottom: 32px;
+}
+
+.view-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.view-subtitle {
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+</style>
