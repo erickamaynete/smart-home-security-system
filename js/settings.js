@@ -66,6 +66,12 @@ function handleToggle(toggle) {
     } else if (label === 'Email Reports') {
         state.setState({ notifications: { email: isActive } });
         showToast(`Email reports ${isActive ? 'on' : 'off'}`, 'info');
+    } else if (label === 'Do Not Disturb') {
+        showToast(`Quiet hours ${isActive ? 'enabled' : 'disabled'}`, 'info');
+    } else if (label === 'Show Tips on Dashboard') {
+        showToast(`Dashboard tips ${isActive ? 'on' : 'off'}`, 'info');
+    } else if (label === 'Login Alerts') {
+        showToast(`Login alerts ${isActive ? 'on' : 'off'}`, 'info');
     }
 }
 

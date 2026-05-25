@@ -2,7 +2,6 @@
  * GuardIQ Camera Logic
  */
 import { state } from './state.js';
-import { router } from './router.js';
 import { showToast } from './app.js';
 
 export function initCameras() {
@@ -23,19 +22,9 @@ export function initCameras() {
             return;
         }
 
-        // View button
-        const viewBtn = e.target.closest('.camera-row .btn:not(.resync-btn)');
-        if (viewBtn && viewBtn.textContent === 'View') {
-            const row = viewBtn.closest('.camera-row');
-            const name = row.querySelector('h4').textContent;
-            router.navigate('dashboard');
-            showToast(`Switching to ${name} feed`, 'success');
-            return;
-        }
-
         // Re-sync button
-        const resyncBtn = e.target.closest('.camera-row .btn');
-        if (resyncBtn && resyncBtn.textContent === 'Re-sync') {
+        const resyncBtn = e.target.closest('.resync-btn');
+        if (resyncBtn) {
             handleResync(resyncBtn);
         }
     });

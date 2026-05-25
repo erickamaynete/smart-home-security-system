@@ -1,8 +1,3 @@
-<header class="view-header">
-    <h1 class="view-title">Cameras</h1>
-    <p class="view-subtitle">Manage and monitor all connected security feeds.</p>
-</header>
-
 <div class="filter-bar">
     <button class="btn btn-outline active" data-filter="all">All</button>
     <button class="btn btn-outline" data-filter="indoor">Indoor</button>
@@ -12,10 +7,10 @@
 
 <div class="camera-list">
     <!-- Front Door -->
-    <div class="card camera-row" data-category="outdoor" data-video="frontdoor.mp4">
-        <div class="thumb-box">
+    <div class="card camera-row" data-category="outdoor" data-camera="front-door" data-video="frontdoor.mp4">
+        <button type="button" class="thumb-box" aria-label="Open Front Door camera">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-        </div>
+        </button>
         <div class="name-col">
             <h4 style="font-size: 15px; font-weight: 600;">Front Door</h4>
             <span style="font-size: 12px; color: var(--text-secondary);">Main Entrance</span>
@@ -31,17 +26,17 @@
         </div>
         <div class="res-col" style="color: var(--text-secondary); font-size: 14px;">4K</div>
         <div class="activity-col" style="color: var(--text-secondary); font-size: 14px;">2 min ago</div>
-        <div class="action-col" style="display: flex; gap: 8px;">
-            <button class="btn btn-outline zoom-btn" style="padding: 6px 12px; font-size: 12px;">Zoom</button>
-            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">View</button>
+        <div class="action-col">
+            <button class="btn btn-outline zoom-btn">Zoom</button>
+            <button class="btn btn-outline">View</button>
         </div>
     </div>
 
     <!-- Backyard -->
-    <div class="card camera-row" data-category="outdoor" data-video="backyard.mp4">
-        <div class="thumb-box">
+    <div class="card camera-row" data-category="outdoor" data-camera="backyard" data-video="backyard.mp4">
+        <button type="button" class="thumb-box" aria-label="Open Backyard camera">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-        </div>
+        </button>
         <div class="name-col">
             <h4 style="font-size: 15px; font-weight: 600;">Backyard</h4>
             <span style="font-size: 12px; color: var(--text-secondary);">Garden Area</span>
@@ -57,17 +52,17 @@
         </div>
         <div class="res-col" style="color: var(--text-secondary); font-size: 14px;">4K</div>
         <div class="activity-col" style="color: var(--text-secondary); font-size: 14px;">8 min ago</div>
-        <div class="action-col" style="display: flex; gap: 8px;">
-            <button class="btn btn-outline zoom-btn" style="padding: 6px 12px; font-size: 12px;">Zoom</button>
-            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">View</button>
+        <div class="action-col">
+            <button class="btn btn-outline zoom-btn">Zoom</button>
+            <button class="btn btn-outline">View</button>
         </div>
     </div>
 
     <!-- Garage -->
-    <div class="card camera-row" data-category="indoor" data-video="garage.mp4">
-        <div class="thumb-box">
+    <div class="card camera-row" data-category="indoor" data-camera="garage" data-video="garage.mp4">
+        <button type="button" class="thumb-box" aria-label="Open Garage camera">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-        </div>
+        </button>
         <div class="name-col">
             <h4 style="font-size: 15px; font-weight: 600;">Garage</h4>
             <span style="font-size: 12px; color: var(--text-secondary);">Parking Space</span>
@@ -83,17 +78,17 @@
         </div>
         <div class="res-col" style="color: var(--text-secondary); font-size: 14px;">1080p</div>
         <div class="activity-col" style="color: var(--text-secondary); font-size: 14px;">1 hr ago</div>
-        <div class="action-col" style="display: flex; gap: 8px;">
-            <button class="btn btn-outline zoom-btn" style="padding: 6px 12px; font-size: 12px;">Zoom</button>
-            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">View</button>
+        <div class="action-col">
+            <button class="btn btn-outline zoom-btn">Zoom</button>
+            <button class="btn btn-outline">View</button>
         </div>
     </div>
 
     <!-- Side Gate -->
-    <div class="card camera-row" data-category="outdoor" data-video="sidegate.mp4">
-        <div class="thumb-box">
+    <div class="card camera-row" data-category="outdoor" data-camera="side-gate" data-video="sidegate.mp4">
+        <button type="button" class="thumb-box" aria-label="Open Side Gate camera">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-        </div>
+        </button>
         <div class="name-col">
             <h4 style="font-size: 15px; font-weight: 600;">Side Gate</h4>
             <span style="font-size: 12px; color: var(--text-secondary);">North Fence</span>
@@ -109,17 +104,17 @@
         </div>
         <div class="res-col" style="color: var(--text-secondary); font-size: 14px;">1080p</div>
         <div class="activity-col" style="color: var(--text-secondary); font-size: 14px;">3 min ago</div>
-        <div class="action-col" style="display: flex; gap: 8px;">
-            <button class="btn btn-outline zoom-btn" style="padding: 6px 12px; font-size: 12px;">Zoom</button>
-            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">View</button>
+        <div class="action-col">
+            <button class="btn btn-outline zoom-btn">Zoom</button>
+            <button class="btn btn-outline">View</button>
         </div>
     </div>
 
     <!-- Living Room -->
-    <div class="card camera-row" data-category="indoor" data-video="https://assets.mixkit.co/videos/preview/mixkit-interior-view-of-a-modern-living-room-4818-large.mp4">
-        <div class="thumb-box">
+    <div class="card camera-row" data-category="indoor" data-camera="living-room" data-video="https://assets.mixkit.co/videos/preview/mixkit-interior-view-of-a-modern-living-room-4818-large.mp4">
+        <button type="button" class="thumb-box" aria-label="Open Living Room camera">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-        </div>
+        </button>
         <div class="name-col">
             <h4 style="font-size: 15px; font-weight: 600;">Living Room</h4>
             <span style="font-size: 12px; color: var(--text-secondary);">Main Hall</span>
@@ -135,17 +130,17 @@
         </div>
         <div class="res-col" style="color: var(--text-secondary); font-size: 14px;">1080p</div>
         <div class="activity-col" style="color: var(--text-secondary); font-size: 14px;">22 min ago</div>
-        <div class="action-col" style="display: flex; gap: 8px;">
-            <button class="btn btn-outline zoom-btn" style="padding: 6px 12px; font-size: 12px;">Zoom</button>
-            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">View</button>
+        <div class="action-col">
+            <button class="btn btn-outline zoom-btn">Zoom</button>
+            <button class="btn btn-outline">View</button>
         </div>
     </div>
 
     <!-- Basement -->
-    <div class="card camera-row" data-category="offline" data-video="https://assets.mixkit.co/videos/preview/mixkit-security-camera-view-of-a-dark-hallway-34543-large.mp4">
-        <div class="thumb-box">
+    <div class="card camera-row" data-category="offline" data-camera="basement" data-video="https://assets.mixkit.co/videos/preview/mixkit-security-camera-view-of-a-dark-hallway-34543-large.mp4">
+        <button type="button" class="thumb-box" aria-label="Open Basement camera">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-        </div>
+        </button>
         <div class="name-col">
             <h4 style="font-size: 15px; font-weight: 600;">Basement</h4>
             <span style="font-size: 12px; color: var(--text-secondary);">Storage Room</span>
@@ -161,9 +156,9 @@
         </div>
         <div class="res-col" style="color: var(--text-secondary); font-size: 14px;">1080p</div>
         <div class="activity-col" style="color: var(--text-secondary); font-size: 14px;">2 hrs ago</div>
-        <div class="action-col" style="display: flex; gap: 8px;">
-            <button class="btn btn-outline zoom-btn" style="padding: 6px 12px; font-size: 12px;">Zoom</button>
-            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">Re-sync</button>
+        <div class="action-col">
+            <button class="btn btn-outline zoom-btn">Zoom</button>
+            <button class="btn btn-outline resync-btn">Resync</button>
         </div>
     </div>
 </div>

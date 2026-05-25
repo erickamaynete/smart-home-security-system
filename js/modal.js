@@ -3,6 +3,27 @@
  */
 import { showToast } from './app.js';
 
+function getCameraRowMeta(row) {
+    if (!row) return null;
+    const videoSrc = row.getAttribute('data-video');
+    const title = row.querySelector('h4, h3')?.textContent?.trim();
+    if (!videoSrc || !title) return null;
+    return { title, videoSrc };
+}
+
+export function openVideoModal(title, videoSrc) {
+    const modal = document.getElementById('video-modal');
+    const modalVideo = document.getElementById('modal-video');
+    const modalTitle = document.getElementById('modal-title');
+    if (!modal || !modalVideo || !modalTitle) return;
+
+    modalTitle.textContent = title;
+    modalVideo.src = videoSrc;
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    showToast(`Viewing ${title}`, 'info');
+}
+
 export function initModal() {
     const modal = document.getElementById('video-modal');
     const closeBtn = document.getElementById('close-modal');
@@ -13,22 +34,52 @@ export function initModal() {
 
     // Global listener for zoom buttons
     document.addEventListener('click', (e) => {
+        const thumbBtn = e.target.closest('.camera-row .thumb-box');
+        if (thumbBtn) {
+            const row = thumbBtn.closest('.camera-row');
+            const meta = getCameraRowMeta(row);
+            if (meta) {
+                document.querySelectorAll('.camera-row.is-active').forEach((el) => {
+                    el.classList.remove('is-active');
+                });
+                row?.classList.add('is-active');
+                openModal(meta.title, meta.videoSrc);
+            }
+            return;
+        }
+
         const zoomBtn = e.target.closest('.zoom-btn');
         if (zoomBtn) {
+            const row = zoomBtn.closest('.camera-row');
             const card = zoomBtn.closest('.camera-feed-card');
             const timelineEntry = zoomBtn.closest('.timeline-entry');
-            
+
             let videoSrc = zoomBtn.getAttribute('data-video');
-            let title = "Video Preview";
+            let title = 'Video Preview';
+
+            if (row) {
+                const meta = getCameraRowMeta(row);
+                if (meta) {
+                    openModal(meta.title, meta.videoSrc);
+                    return;
+                }
+            }
 
             if (card) {
                 videoSrc = card.getAttribute('data-video');
                 title = card.querySelector('h3').textContent;
             } else if (timelineEntry) {
-                title = timelineEntry.querySelector('p').textContent + " (Recording)";
+                title = timelineEntry.querySelector('p').textContent + ' (Recording)';
             }
-            
+
             openModal(title, videoSrc);
+            return;
+        }
+
+        const viewBtn = e.target.closest('.camera-row .btn');
+        if (viewBtn && viewBtn.textContent.trim() === 'View') {
+            const meta = getCameraRowMeta(viewBtn.closest('.camera-row'));
+            if (meta) openModal(meta.title, meta.videoSrc);
             return;
         }
 
@@ -45,19 +96,17 @@ export function initModal() {
     });
 
     function openModal(title, videoSrc) {
-        modalTitle.textContent = title;
-        modalVideo.src = videoSrc;
-        modal.hidden = false;
-        document.body.style.overflow = 'hidden'; // Prevent scroll
-        
-        showToast(`Viewing ${title}`, 'info');
+        openVideoModal(title, videoSrc);
     }
 
     function closeModal() {
         modal.hidden = true;
         modalVideo.pause();
-        modalVideo.src = "";
+        modalVideo.src = '';
         document.body.style.overflow = '';
+        document.querySelectorAll('.camera-row.is-active').forEach((el) => {
+            el.classList.remove('is-active');
+        });
     }
 
     closeBtn.addEventListener('click', closeModal);

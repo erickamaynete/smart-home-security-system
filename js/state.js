@@ -1,6 +1,8 @@
 /**
  * GuardIQ Global State Management
  */
+import { api } from './api.js';
+
 export const state = {
     armed: true,
     alertCount: 3,
@@ -29,15 +31,32 @@ export const state = {
      * Update state and notify listeners
      * @param {Object} newState 
      */
-    setState(newState) {
+    setState(newState, options = {}) {
+        const { syncServer = true } = options;
+
         // Handle nested updates for notifications
-        if (newState.notifications) {
-            this.notifications = { ...this.notifications, ...newState.notifications };
-            delete newState.notifications;
+        const payload = { ...newState };
+        if (payload.notifications) {
+            this.notifications = { ...this.notifications, ...payload.notifications };
+            delete payload.notifications;
         }
-        
-        Object.assign(this, newState);
+
+        Object.assign(this, payload);
         this.notify();
+
+        if (syncServer) {
+            api.patchState(newState).catch((err) => {
+                console.warn('Failed to sync state with server:', err);
+            });
+        }
+    },
+
+    /**
+     * Load initial state from the web.py API
+     */
+    async loadFromServer() {
+        const serverState = await api.getState();
+        this.setState(serverState, { syncServer: false });
     },
     
     /**

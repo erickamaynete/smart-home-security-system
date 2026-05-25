@@ -1,10 +1,10 @@
 <div class="sidebar-header">
     <div class="logo">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-        </svg>
         <span class="wordmark">HomeSecure</span>
     </div>
+    <button type="button" id="sidebar-close" class="sidebar-back-btn" aria-label="Close menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
 </div>
 
 <div class="user-block">
@@ -28,15 +28,19 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
         Activity Log
     </a>
-    <a href="#" class="nav-item" data-view="alerts">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-        Alerts
-        <span id="alert-badge" class="badge-count">3</span>
-    </a>
-    <a href="#" class="nav-item" data-view="settings">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        Settings
-    </a>
+    <div class="nav-group" id="settings-nav-group">
+        <button type="button" class="nav-item nav-item-toggle" id="settings-nav-toggle" aria-expanded="false" aria-controls="settings-submenu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span class="nav-item-label">Settings</span>
+            <svg class="nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="nav-submenu" id="settings-submenu" hidden>
+            <a href="#" class="nav-subitem" data-view="account-security">Account Security</a>
+            <a href="#" class="nav-subitem" data-view="notification-settings">Notification Settings</a>
+            <a href="#" class="nav-subitem" data-view="help-settings">Help Settings</a>
+            <a href="#" class="nav-subitem" data-view="about-system">About System</a>
+        </div>
+    </div>
 </nav>
 
 <div class="sidebar-footer">
@@ -45,17 +49,45 @@
         <div id="sidebar-armed-toggle" class="toggle active"></div>
         <span id="sidebar-armed-text" class="status-text">ARMED</span>
     </div>
+    <button type="button" id="logout-btn" class="logout-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        Log Out
+    </button>
 </div>
 
 <style>
 .sidebar-header {
-    padding: 32px 24px;
+    padding: 24px 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
 }
 
 .logo {
     display: flex;
     align-items: center;
     gap: 12px;
+    min-width: 0;
+    flex: 1;
+}
+
+.sidebar-back-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    margin-left: auto;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.sidebar-back-btn:hover {
+    color: var(--accent);
 }
 
 .wordmark {
@@ -134,6 +166,70 @@
     font-weight: 600;
 }
 
+.nav-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item-toggle {
+    width: 100%;
+    border: none;
+    background: none;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+}
+
+.nav-item-label {
+    flex: 1;
+}
+
+.nav-chevron {
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    transition: transform 0.2s ease;
+}
+
+.nav-group.open .nav-chevron {
+    transform: rotate(180deg);
+}
+
+.nav-group.open .nav-item-toggle,
+.nav-group.has-active .nav-item-toggle {
+    color: var(--text-primary);
+}
+
+.nav-submenu {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 0 8px;
+    background: #0B1020;
+}
+
+.nav-submenu[hidden] {
+    display: none !important;
+}
+
+.nav-subitem {
+    padding: 10px 24px 10px 52px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.nav-subitem:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.nav-subitem.active {
+    color: var(--accent);
+    font-weight: 600;
+    border-left-color: var(--accent);
+    background: rgba(0, 194, 255, 0.06);
+}
+
 .badge-count {
     position: absolute;
     right: 24px;
@@ -177,36 +273,26 @@
     color: var(--text-secondary);
 }
 
-@media (max-width: 768px) {
-    .sidebar-header, .user-block, .sidebar-footer, .nav-item span {
-        display: none;
-    }
-
-    .sidebar-nav {
-        flex-direction: row;
-        justify-content: space-around;
-        width: 100%;
-        height: 100%;
-    }
-
-    .nav-item {
-        padding: 0;
-        flex: 1;
-        justify-content: center;
-        border-left: none;
-        border-top: 3px solid transparent;
-    }
-
-    .nav-item.active {
-        border-left-color: transparent;
-        border-top-color: var(--accent);
-    }
-
-    .badge-count {
-        right: auto;
-        left: 50%;
-        top: 10px;
-        margin-left: 8px;
-    }
+.logout-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: all 0.2s ease;
 }
+
+.logout-btn:hover {
+    color: var(--danger);
+    border-color: rgba(255, 76, 76, 0.4);
+    background: rgba(255, 76, 76, 0.06);
+}
+
 </style>

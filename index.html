@@ -14,26 +14,31 @@
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/views.css">
+    <link rel="stylesheet" href="css/navbar.css">
 </head>
 <body>
-    <!-- 
-        NOTE: This app must be served via a local HTTP server (e.g., Live Server or python -m http.server)
-        to allow component fetching via the Fetch API.
-    -->
+    <!-- Run: python web.py — sign in at /login.html (demo: demo@homesecure.com / demo1234) -->
     
     <div id="app" class="app-container">
-        <!-- Sidebar placeholder -->
-        <aside id="sidebar-container" class="sidebar"></aside>
-
         <!-- Main content area -->
         <main id="main-content" class="content">
+            <div id="navbar-container"></div>
+            <div class="view-stack">
             <!-- View containers will be injected here -->
             <div id="view-dashboard" class="view" hidden></div>
             <div id="view-cameras" class="view" hidden></div>
             <div id="view-activity" class="view" hidden></div>
             <div id="view-alerts" class="view" hidden></div>
-            <div id="view-settings" class="view" hidden></div>
+            <div id="view-account-security" class="view" hidden></div>
+            <div id="view-notification-settings" class="view" hidden></div>
+            <div id="view-help-settings" class="view" hidden></div>
+            <div id="view-about-system" class="view" hidden></div>
+            </div>
         </main>
+
+        <!-- Sidebar drawer (burger menu) -->
+        <aside id="sidebar-container" class="sidebar sidebar-drawer" aria-hidden="true"></aside>
+        <div id="sidebar-backdrop" class="sidebar-backdrop" hidden aria-hidden="true"></div>
 
         <!-- Alarm Overlay -->
         <div id="alarm-overlay" class="alarm-overlay" hidden>

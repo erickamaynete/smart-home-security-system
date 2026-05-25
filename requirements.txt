@@ -1,0 +1,2 @@
+# PyPI 0.62 does not support Python 3.13+; use the maintained fork from GitHub.
+web.py @ git+https://github.com/webpy/webpy.git

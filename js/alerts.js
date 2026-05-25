@@ -63,10 +63,14 @@ function handleDismiss(btn) {
  * Update UI based on alert count
  */
 function updateAlertUI(currentState) {
-    const badge = document.getElementById('alert-badge');
+    const count = currentState.alertCount ?? 0;
+    const text = String(count);
+
+    const badge = document.getElementById('navbar-notif-badge');
     if (badge) {
-        badge.textContent = currentState.alertCount;
-        badge.style.display = currentState.alertCount > 0 ? 'block' : 'none';
+        badge.textContent = text;
+        badge.dataset.count = text;
+        badge.hidden = count <= 0;
     }
 }
 
