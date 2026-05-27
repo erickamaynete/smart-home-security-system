@@ -7,7 +7,7 @@ import { requireAuth, applyUserProfile, logout } from './session.js';
 import { router } from './router.js';
 import { initCameras } from './cameras.js';
 import { initAlerts } from './alerts.js';
-import { initSettings } from './settings.js';
+import { initSettings, probeTapoStream } from './settings.js';
 import { initAccountSecurity } from './account-security.js';
 import { initActivity } from './activity.js';
 import { initModal } from './modal.js';
@@ -37,7 +37,8 @@ async function initApp() {
         loadComponent('view-account-security', 'components/account-security.html'),
         loadComponent('view-notification-settings', 'components/notification-settings.html'),
         loadComponent('view-help-settings', 'components/help-settings.html'),
-        loadComponent('view-about-system', 'components/about-system.html')
+        loadComponent('view-about-system', 'components/about-system.html'),
+        loadComponent('view-settings', 'components/settings.html')
     ]);
 
     applyUserProfile(user);
@@ -62,10 +63,12 @@ async function initApp() {
     // Global Alarm Action
     setupGlobalActions();
 
-    // Listen for view changes to re-sync specific UI elements
+    // Specific hardware sync for dashboard components that might be loaded later
     window.addEventListener('viewChanged', (e) => {
         if (e.detail.view === 'dashboard') {
             updateLockUI();
+            probeTapoStream();
+            state.notify();
         }
     });
 }

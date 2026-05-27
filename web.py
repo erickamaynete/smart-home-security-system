@@ -16,7 +16,25 @@ import os
 import secrets
 import socket
 import sys
+import requests
 from copy import deepcopy
+import time
+
+# --- Threading support for MJPEG streaming ---
+from socketserver import ThreadingMixIn
+from wsgiref.simple_server import WSGIServer, WSGIRequestHandler, make_server
+
+class ThreadedWSGIServer(ThreadingMixIn, WSGIServer):
+    daemon_threads = True
+
+def run_threaded_server(app, host='0.0.0.0', port=5000):
+    server = make_server(host, port, app, ThreadedWSGIServer, WSGIRequestHandler)
+    print(f"Server running at http://{host}:{port}/ (Threaded)")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("Shutting down...")
+        server.server_close()
 
 # Avoid shadowing the web.py framework when this file is named web.py
 _dir = os.path.dirname(os.path.abspath(__file__))
@@ -29,6 +47,36 @@ if __name__ == "__main__":
     sys.path.insert(0, _dir)
 
 BASE_DIR = _dir
+
+# go2rtc relay (Tapo C500 source name must match go2rtc.yaml)
+GO2RTC_BASE = os.environ.get("GO2RTC_URL", "http://127.0.0.1:1984")
+GO2RTC_SRC = os.environ.get("GO2RTC_TAPO_SRC", "tapo_c500")
+GO2RTC_FRAME_URL = f"{GO2RTC_BASE}/api/frame.jpeg?src={GO2RTC_SRC}"
+
+
+def probe_go2rtc() -> bool:
+    """Return True when go2rtc serves a JPEG frame for the Tapo source."""
+    try:
+        # Some go2rtc builds spawn ffmpeg for JPEG; allow a bit more time.
+        for attempt in range(2):
+            resp = requests.get(GO2RTC_FRAME_URL, timeout=5)
+            if resp.status_code == 200 and len(resp.content) > 500:
+                return True
+            time.sleep(0.15 if attempt == 0 else 0)
+        return False
+    except Exception as exc:
+        print(f"[GO2RTC] Probe failed: {exc}")
+        return False
+
+
+def refresh_tapo_connection() -> None:
+    connected = probe_go2rtc()
+    system_state["tapoConfig"]["connected"] = connected
+    if connected:
+        print(f"[GO2RTC] Tapo stream online ({GO2RTC_SRC})")
+    else:
+        print(f"[GO2RTC] Tapo stream offline — check go2rtc at {GO2RTC_BASE}")
+
 
 DEFAULT_STATE = {
     "armed": True,
@@ -48,15 +96,16 @@ DEFAULT_STATE = {
         "basement": "offline",
     },
     "tapoConfig": {
-        "ip": "192.168.1.100",
-        "username": "admin",
-        "password": "",
-        "connected": True,
+        "ip": "192.168.100.6",
+        "username": "homesecure",
+        "password": "qwertyuiop",
+        "connected": False,
         "model": "Tapo C500"
     }
 }
 
 system_state = deepcopy(DEFAULT_STATE)
+refresh_tapo_connection()
 
 # --- Auth (in-memory demo store) ---
 sessions: dict[str, str] = {}  # token -> email
@@ -277,6 +326,7 @@ class state_api:
     def GET(self):
         if not require_user():
             return json_response({"error": "Not authenticated"})
+        refresh_tapo_connection()
         return json_response(system_state)
 
     def PATCH(self):
@@ -313,38 +363,99 @@ class patrol:
         })
 
 
+class hardware_test:
+    def POST(self, device_type):
+        if not require_user():
+            return json_response({"error": "Not authenticated"})
+        
+        data = read_json_body()
+        ip = (data.get("ip") or "").replace(",", ".").replace(" ", "").strip()
+        port = data.get("port", "80") # Default to 80 if not provided
+        
+        if not ip:
+            web.ctx.status = "400 Bad Request"
+            return json_response({"error": "IP address is required"})
+
+        # REAL CONNECTION CHECK
+        is_reachable = False
+        try:
+            with socket.create_connection((ip, int(port)), timeout=2.0) as sock:
+                is_reachable = True
+        except (socket.timeout, ConnectionRefusedError, OSError) as e:
+            print(f"Hardware connection failed to {ip}:{port} - {str(e)}")
+            is_reachable = False
+        
+        if is_reachable:
+            print(f"[TAPO_CONNECT] SUCCESS: Tapo C500 is online at {ip}:{port}")
+            return json_response({
+                "ok": True, 
+                "message": f"Successfully connected to {device_type} at {ip}:{port}",
+                "status": "online"
+            })
+        else:
+            print(f"[TAPO_CONNECT] FAILED: Could not reach Tapo C500 at {ip}:{port}")
+            web.ctx.status = "408 Request Timeout"
+            return json_response({
+                "ok": False, 
+                "error": f"Could not reach {device_type} at {ip}:{port}. Ensure the device is powered on and both devices are on the same Wi-Fi.",
+                "status": "offline"
+            })
+
+
+class tapo_proxy:
+    def GET(self):
+        try:
+            resp = None
+            last_err = None
+            for attempt in range(2):
+                resp = requests.get(GO2RTC_FRAME_URL, timeout=5)
+                if resp.status_code == 200:
+                    break
+                last_err = (resp.status_code, (resp.text or "")[:200])
+                time.sleep(0.15 if attempt == 0 else 0)
+            
+            if resp.status_code == 200:
+                web.header('Content-Type', 'image/jpeg')
+                web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                web.header('Access-Control-Allow-Origin', '*')
+                return resp.content
+            else:
+                if last_err:
+                    code, msg = last_err
+                    print(f"[GO2RTC_PROXY] Error {code} from go2rtc: {msg}")
+                else:
+                    print(f"[GO2RTC_PROXY] Error {resp.status_code} from go2rtc")
+                web.ctx.status = "502 Bad Gateway"
+                return f"go2rtc source not ready (status={resp.status_code})"
+                
+        except Exception as e:
+            print(f"[GO2RTC_PROXY] Connection failed: {e}")
+            web.ctx.status = "502 Bad Gateway"
+            return "go2rtc not running on port 1984"
+
+
 class static_files:
     def GET(self, path):
         return serve_static(path)
 
 
 urls = (
-    "/",
-    "index",
-    "/api/health",
-    "health",
-    "/api/auth/login",
-    "auth_login",
-    "/api/auth/signup",
-    "auth_signup",
-    "/api/auth/logout",
-    "auth_logout",
-    "/api/auth/me",
-    "auth_me",
-    "/api/auth/change-password",
-    "auth_change_password",
-    "/api/auth/reset-password",
-    "auth_reset_password",
-    "/api/state",
-    "state_api",
-    "/api/alarm",
-    "alarm",
-    "/api/lock-doors",
-    "lock_doors",
-    "/api/patrol",
-    "patrol",
-    "/(.*)",
-    "static_files",
+    "/api/stream/tapo", "tapo_proxy",
+    "/api/stream/tapo/", "tapo_proxy",
+    "/api/hardware/test/(.*)", "hardware_test",
+    "/", "index",
+    "/api/health", "health",
+    "/api/auth/login", "auth_login",
+    "/api/auth/signup", "auth_signup",
+    "/api/auth/logout", "auth_logout",
+    "/api/auth/me", "auth_me",
+    "/api/auth/change-password", "auth_change_password",
+    "/api/auth/reset-password", "auth_reset_password",
+    "/api/state", "state_api",
+    "/api/alarm", "alarm",
+    "/api/lock-doors", "lock_doors",
+    "/api/patrol", "patrol",
+    "/(.*)", "static_files",
 )
 
 app = web.application(urls, globals())
@@ -406,7 +517,7 @@ def get_network_ip(configured: str) -> str:
 
 
 def print_access_urls(port: int, network_ip: str) -> None:
-    print("\nHomeSecure is running:", flush=True)
+    print("\n[VER: 2.1] HomeSecure is running:", flush=True)
     print(f"  Local:    http://127.0.0.1:{port}/login.html", flush=True)
     print(f"  Network:  http://{network_ip}:{port}/login.html", flush=True)
     detected = get_lan_ip()
@@ -445,7 +556,9 @@ def run_server(port: int, debug: bool = False, network_ip: str = NETWORK_IP) -> 
     chosen_port = resolve_port(BIND_HOST, port)
     lan_ip = get_network_ip(network_ip)
     print_access_urls(chosen_port, lan_ip)
-    web.httpserver.runsimple(app.wsgifunc(), (BIND_HOST, chosen_port))
+    
+    # Use our custom threaded server instead of web.py's single-threaded one
+    run_threaded_server(app.wsgifunc(), BIND_HOST, chosen_port)
 
 
 if __name__ == "__main__":

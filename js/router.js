@@ -8,6 +8,7 @@ const SETTINGS_VIEWS = [
     'notification-settings',
     'help-settings',
     'about-system',
+    'settings',
 ];
 
 export const VIEW_LABELS = {
@@ -19,6 +20,7 @@ export const VIEW_LABELS = {
     'notification-settings': 'Notification Settings',
     'help-settings': 'Help Settings',
     'about-system': 'About System',
+    'settings': 'Hardware & Settings',
 };
 
 function updateNavbar(viewName) {
@@ -64,6 +66,7 @@ export const router = {
         'notification-settings',
         'help-settings',
         'about-system',
+        'settings',
     ],
     activeView: 'dashboard',
 

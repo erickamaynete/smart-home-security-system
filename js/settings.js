@@ -1,27 +1,25 @@
 /**
- * GuardIQ Settings Logic
+ * GuardIQ Settings Logic - Hardware Connectivity Focus
  */
 import { state } from './state.js';
+import { api } from './api.js';
 import { showToast } from './app.js';
 
+/** Proxied go2rtc JPEG snapshot (see web.py tapo_proxy → frame.jpeg?src=tapo_c500) */
+export const TAPO_STREAM_URL = '/api/stream/tapo';
+
+// Debounce Tapo connectivity to avoid abrupt connect/disconnect on transient errors.
+// We require N consecutive failures before flipping offline, and 1 success to flip online.
+const TAPO_OFFLINE_FAILURES = 3;
+let tapoConsecutiveFailures = 0;
+
 export function initSettings() {
-    console.log('GuardIQ: Initializing Settings...');
+    console.log('GuardIQ: Initializing Hardware Connectivity Settings...');
+
+    probeTapoStream();
+    setInterval(probeTapoStream, 30000);
     
-    // Handle Toggles and Sliders
-    document.addEventListener('input', (e) => {
-        const slider = e.target.closest('#motion-slider');
-        if (slider) {
-            handleSlider(slider);
-        }
-    });
-
     document.addEventListener('click', (e) => {
-        const toggle = e.target.closest('.toggle');
-        if (toggle) {
-            handleToggle(toggle);
-            return;
-        }
-
         // Tapo Config Buttons
         const saveTapoBtn = e.target.closest('#save-tapo-config');
         if (saveTapoBtn) {
@@ -35,124 +33,193 @@ export function initSettings() {
             return;
         }
     });
+
+    // Subscribe to state to keep dashboard synced
+    state.subscribe((currentState) => {
+        if (currentState.tapoConfig) {
+            syncTapoUI(currentState.tapoConfig.connected);
+        }
+    });
+}
+
+/**
+ * Check go2rtc relay via backend proxy and update connected state.
+ */
+export async function probeTapoStream() {
+    try {
+        const res = await fetch(`${TAPO_STREAM_URL}?t=${Date.now()}`);
+        if (res.ok) {
+            tapoConsecutiveFailures = 0;
+            if (!state.tapoConfig?.connected) {
+                state.setState(
+                    { tapoConfig: { ...state.tapoConfig, connected: true } },
+                    { syncServer: false }
+                );
+            } else {
+                syncTapoUI(true);
+            }
+            return true;
+        }
+
+        // Non-OK response counts as a failure, but we don't flip offline immediately.
+        tapoConsecutiveFailures += 1;
+        if (state.tapoConfig?.connected && tapoConsecutiveFailures >= TAPO_OFFLINE_FAILURES) {
+            state.setState(
+                { tapoConfig: { ...state.tapoConfig, connected: false } },
+                { syncServer: false }
+            );
+        }
+        return state.tapoConfig?.connected ?? false;
+    } catch (err) {
+        console.warn('Tapo go2rtc probe failed:', err);
+        tapoConsecutiveFailures += 1;
+        if (state.tapoConfig?.connected && tapoConsecutiveFailures >= TAPO_OFFLINE_FAILURES) {
+            state.setState(
+                { tapoConfig: { ...state.tapoConfig, connected: false } },
+                { syncServer: false }
+            );
+        }
+        return state.tapoConfig?.connected ?? false;
+    }
+}
+
+/**
+ * Sync Tapo C500 status across Dashboard and Settings
+ */
+let tapoRefreshInterval = null;
+
+function syncTapoUI(connected) {
+    // Dashboard Sync
+    const dashPulse = document.getElementById('dash-tapo-pulse');
+    const dashBadge = document.getElementById('dash-tapo-badge');
+    const dashIP = document.getElementById('dash-tapo-ip-text');
+    const dashMotion = document.getElementById('dash-tapo-motion');
+    const dashPlaceholder = document.getElementById('dash-tapo-placeholder');
+    const dashFeed = document.getElementById('dash-tapo-feed');
+
+    if (dashPulse) dashPulse.style.display = connected ? 'block' : 'none';
+    if (dashBadge) {
+        dashBadge.textContent = connected ? 'TAPO LIVE' : 'TAPO OFFLINE';
+        dashBadge.style.background = connected ? 'var(--accent)' : 'var(--text-secondary)';
+    }
+    if (dashIP) dashIP.textContent = connected ? `WiFi: ${state.tapoConfig.ip}` : 'WiFi: Disconnected';
+    if (dashMotion) {
+        dashMotion.textContent = connected ? 'Clear' : 'Offline';
+        dashMotion.className = connected ? 'badge badge-success motion-status' : 'badge badge-gray motion-status';
+    }
+    if (dashPlaceholder) dashPlaceholder.style.display = connected ? 'none' : 'flex';
+
+    const dashTimestamp = document.getElementById('dash-tapo-timestamp');
     
-    // Subscribe to state to keep toggles in sync
-    state.subscribe(syncUI);
+    if (dashFeed) {
+        dashFeed.onerror = () => {
+            // Treat image load error as a transient failure.
+            tapoConsecutiveFailures += 1;
+            if (state.tapoConfig?.connected && tapoConsecutiveFailures >= TAPO_OFFLINE_FAILURES) {
+                state.setState(
+                    { tapoConfig: { ...state.tapoConfig, connected: false } },
+                    { syncServer: false }
+                );
+            }
+        };
+
+        if (connected) {
+            dashFeed.style.opacity = '1';
+            if (!tapoRefreshInterval) {
+                console.log('GuardIQ: Starting Tapo go2rtc relay cycle');
+                const updateFeed = () => {
+                    if (!state.tapoConfig?.connected) return;
+                    dashFeed.src = `${TAPO_STREAM_URL}?t=${Date.now()}`;
+                    if (dashTimestamp) {
+                        const now = new Date();
+                        dashTimestamp.textContent = now.toISOString().replace('T', ' ').split('.')[0];
+                    }
+                };
+                updateFeed();
+                tapoRefreshInterval = setInterval(updateFeed, 2000);
+            }
+        } else {
+            dashFeed.style.opacity = '0.2';
+            dashFeed.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+            if (tapoRefreshInterval) {
+                clearInterval(tapoRefreshInterval);
+                tapoRefreshInterval = null;
+            }
+        }
+    }
+
+    // Settings Sync
+    const settingsDot = document.getElementById('tapo-status-dot');
+    const settingsText = document.getElementById('tapo-status-text');
+
+    if (settingsDot) settingsDot.style.backgroundColor = connected ? 'var(--success)' : 'var(--text-secondary)';
+    if (settingsText) settingsText.textContent = connected ? 'Connected' : 'Disconnected';
 }
 
 /**
  * Save Tapo C500 Configuration
  */
-function handleSaveTapo() {
-    const ip = document.getElementById('tapo-ip').value;
-    const user = document.getElementById('tapo-user').value;
-    const pass = document.getElementById('tapo-pass').value;
+async function handleSaveTapo() {
+    const ipEl = document.getElementById('tapo-ip');
+    const userEl = document.getElementById('tapo-user');
+    const passEl = document.getElementById('tapo-pass');
+    if (!ipEl || !userEl || !passEl) return;
 
-    state.setState({
-        tapoConfig: {
-            ...state.tapoConfig,
-            ip,
-            username: user,
-            password: pass,
-            connected: true
-        }
-    });
+    // Sanitize IP: replace commas with dots and remove spaces
+    const ip = ipEl.value.replace(/,/g, '.').replace(/\s/g, '');
+    ipEl.value = ip; // Update UI to show fixed IP
+    
+    const user = userEl.value;
+    const pass = passEl.value;
 
-    showToast('Tapo C500 configuration updated', 'success');
+    showToast(`Updating Tapo C500 configuration at ${ip}...`, 'info');
+
+    try {
+        const data = await api.testHardware('Tapo-C500', ip, '554');
+        
+        state.setState({
+            tapoConfig: {
+                ...state.tapoConfig,
+                ip,
+                username: user,
+                password: pass,
+            },
+        });
+
+        const streamOk = await probeTapoStream();
+        showToast(
+            streamOk
+                ? (data.message || 'Tapo C500 saved — live stream via go2rtc')
+                : 'Camera IP saved, but go2rtc stream is not ready yet',
+            streamOk ? 'success' : 'warning'
+        );
+    } catch (error) {
+        showToast(error.message || 'Could not verify Tapo C500 connection', 'danger');
+    }
 }
 
 /**
  * Test Tapo C500 Stream
  */
-function handleTestTapo() {
-    showToast('Testing connection to Tapo C500...', 'info');
+async function handleTestTapo() {
+    const ipEl = document.getElementById('tapo-ip');
+    if (!ipEl) return;
     
-    setTimeout(() => {
-        showToast('Connection stable. WiFi signal strong.', 'success');
-    }, 1500);
-}
+    // Sanitize IP
+    const ip = ipEl.value.replace(/,/g, '.').replace(/\s/g, '');
+    ipEl.value = ip;
 
-/**
- * Handle slider input
- */
-function handleSlider(slider) {
-    const value = parseInt(slider.value);
-    state.setState({ motionSensitivity: value });
-    const labels = ['Low', 'Medium', 'High'];
-    showToast(`Motion sensitivity set to ${labels[value-1]}`, 'info');
-}
+    showToast('Testing Tapo stream via go2rtc...', 'info');
 
-/**
- * Handle toggle clicks
- */
-function handleToggle(toggle) {
-    toggle.classList.toggle('active');
-    const isActive = toggle.classList.contains('active');
-    const label = toggle.previousElementSibling?.querySelector('h4')?.textContent || 'Setting';
-    
-    // Check for specific toggles
-    if (toggle.id === 'sidebar-armed-toggle' || toggle.id === 'settings-armed-toggle') {
-        state.setState({ armed: isActive });
-        showToast(`System ${isActive ? 'Armed' : 'Disarmed'}`, isActive ? 'success' : 'warning');
-        return;
-    }
-
-    if (label === 'Night Vision') {
-        state.setState({ nightVision: isActive });
-        showToast(`Night vision ${isActive ? 'enabled' : 'disabled'}`, 'info');
-    } else if (label === 'Two-Factor Authentication') {
-        state.setState({ twoFactor: isActive });
-        showToast(`2FA ${isActive ? 'enabled' : 'disabled'}`, 'success');
-    } else if (label === 'Push Notifications') {
-        state.setState({ notifications: { push: isActive } });
-        showToast(`Push notifications ${isActive ? 'on' : 'off'}`, 'info');
-    } else if (label === 'SMS Alerts') {
-        state.setState({ notifications: { sms: isActive } });
-        showToast(`SMS alerts ${isActive ? 'on' : 'off'}`, 'info');
-    } else if (label === 'Email Reports') {
-        state.setState({ notifications: { email: isActive } });
-        showToast(`Email reports ${isActive ? 'on' : 'off'}`, 'info');
-    } else if (label === 'Do Not Disturb') {
-        showToast(`Quiet hours ${isActive ? 'enabled' : 'disabled'}`, 'info');
-    } else if (label === 'Show Tips on Dashboard') {
-        showToast(`Dashboard tips ${isActive ? 'on' : 'off'}`, 'info');
-    } else if (label === 'Login Alerts') {
-        showToast(`Login alerts ${isActive ? 'on' : 'off'}`, 'info');
-    }
-}
-
-/**
- * Sync all UI elements with global state
- */
-function syncUI(currentState) {
-    // Sync Armed Toggles
-    const armedToggles = [
-        document.getElementById('sidebar-armed-toggle'),
-        document.getElementById('settings-armed-toggle')
-    ];
-    
-    armedToggles.forEach(toggle => {
-        if (toggle) {
-            if (currentState.armed) toggle.classList.add('active');
-            else toggle.classList.remove('active');
+    try {
+        await api.testHardware('Tapo-C500', ip, '554');
+        const streamOk = await probeTapoStream();
+        if (streamOk) {
+            showToast('Tapo C500 live — go2rtc relay is working', 'success');
+        } else {
+            showToast('Camera reachable, but go2rtc has no frame yet. Check tapo_c500 in go2rtc.', 'warning');
         }
-    });
-    
-    // Update status text in sidebar
-    const sidebarText = document.getElementById('sidebar-armed-text');
-    if (sidebarText) {
-        sidebarText.textContent = currentState.armed ? 'ARMED' : 'DISARMED';
+    } catch (error) {
+        showToast(error.message || 'Tapo C500 connection test failed', 'danger');
     }
-    
-    // Update status value in dashboard
-    const dashStatus = document.getElementById('dash-status-value');
-    if (dashStatus) {
-        dashStatus.textContent = currentState.armed ? 'ARMED' : 'DISARMED';
-        dashStatus.style.color = currentState.armed ? 'var(--success)' : 'var(--text-secondary)';
-    }
-
-    // Update Slider if it exists
-    const slider = document.getElementById('motion-slider');
-    if (slider) slider.value = currentState.motionSensitivity;
 }
-

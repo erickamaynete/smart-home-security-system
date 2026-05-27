@@ -3,6 +3,23 @@
  */
 import { showToast } from './app.js';
 
+function isSnapshotSource(src) {
+    if (!src) return false;
+    const lowered = String(src).toLowerCase();
+    return (
+        lowered.includes('/api/stream/tapo') ||
+        lowered.includes('frame.jpeg') ||
+        lowered.endsWith('.jpeg') ||
+        lowered.endsWith('.jpg')
+    );
+}
+
+function withCacheBuster(url) {
+    const base = String(url || '');
+    if (!base) return '';
+    return base.includes('?') ? `${base}&t=${Date.now()}` : `${base}?t=${Date.now()}`;
+}
+
 function getCameraRowMeta(row) {
     if (!row) return null;
     const videoSrc = row.getAttribute('data-video');
@@ -11,14 +28,47 @@ function getCameraRowMeta(row) {
     return { title, videoSrc };
 }
 
+let snapshotInterval = null;
+
 export function openVideoModal(title, videoSrc) {
     const modal = document.getElementById('video-modal');
     const modalVideo = document.getElementById('modal-video');
+    const modalImage = document.getElementById('modal-image');
     const modalTitle = document.getElementById('modal-title');
-    if (!modal || !modalVideo || !modalTitle) return;
+    const modalTimestamp = document.getElementById('modal-timestamp');
+    if (!modal || !modalVideo || !modalImage || !modalTitle) return;
 
     modalTitle.textContent = title;
-    modalVideo.src = videoSrc;
+    modalImage.alt = title;
+
+    if (snapshotInterval) {
+        clearInterval(snapshotInterval);
+        snapshotInterval = null;
+    }
+
+    if (isSnapshotSource(videoSrc)) {
+        // Snapshot stream (Tapo via go2rtc proxy)
+        modalVideo.pause();
+        modalVideo.src = '';
+        modalVideo.style.display = 'none';
+
+        modalImage.style.display = 'block';
+        const updateSnapshot = () => {
+            modalImage.src = withCacheBuster(videoSrc);
+            if (modalTimestamp) {
+                const now = new Date();
+                modalTimestamp.textContent = now.toISOString().replace('T', ' ').split('.')[0];
+            }
+        };
+        updateSnapshot();
+        snapshotInterval = setInterval(updateSnapshot, 1000);
+    } else {
+        // MP4 preview
+        modalImage.style.display = 'none';
+        modalImage.src = '';
+        modalVideo.style.display = 'block';
+        modalVideo.src = videoSrc;
+    }
     modal.hidden = false;
     document.body.style.overflow = 'hidden';
     showToast(`Viewing ${title}`, 'info');
@@ -29,6 +79,7 @@ export function initModal() {
     const closeBtn = document.getElementById('close-modal');
     const modalOverlay = modal.querySelector('.modal-overlay');
     const modalVideo = document.getElementById('modal-video');
+    const modalImage = document.getElementById('modal-image');
     const modalTitle = document.getElementById('modal-title');
     const modalAlarm = document.getElementById('modal-alarm');
 
@@ -103,6 +154,15 @@ export function initModal() {
         modal.hidden = true;
         modalVideo.pause();
         modalVideo.src = '';
+        if (modalImage) {
+            modalImage.src = '';
+            modalImage.style.display = 'none';
+        }
+        modalVideo.style.display = 'block';
+        if (snapshotInterval) {
+            clearInterval(snapshotInterval);
+            snapshotInterval = null;
+        }
         document.body.style.overflow = '';
         document.querySelectorAll('.camera-row.is-active').forEach((el) => {
             el.classList.remove('is-active');

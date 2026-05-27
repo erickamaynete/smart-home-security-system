@@ -1,6 +1,6 @@
 <header class="view-header">
-    <h1 class="view-title">Settings</h1>
-    <p class="view-subtitle">Configure your security system preferences.</p>
+    <h1 class="view-title">Hardware Connectivity</h1>
+    <p class="view-subtitle">Manage your physical device connections and camera integrations.</p>
 </header>
 
 <div class="settings-section">
@@ -14,130 +14,27 @@
             <div class="hardware-config-form" style="width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                 <div class="input-group">
                     <label style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; display: block;">IP Address</label>
-                    <input type="text" id="tapo-ip" class="form-control" value="192.168.1.100" placeholder="e.g. 192.168.1.100" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px; border-radius: 4px; width: 100%;">
+                    <input type="text" id="tapo-ip" class="form-control" value="192.168.100.6" placeholder="e.g. 192.168.1.100" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px; border-radius: 4px; width: 100%;">
                 </div>
                 <div class="input-group">
                     <label style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; display: block;">WiFi Status</label>
                     <div style="display: flex; align-items: center; gap: 8px; height: 38px;">
-                        <span class="status-dot" style="background-color: var(--success);"></span>
-                        <span style="font-size: 13px;">Connected</span>
+                        <span id="tapo-status-dot" class="status-dot" style="background-color: var(--text-secondary);"></span>
+                        <span id="tapo-status-text" style="font-size: 13px;">Disconnected</span>
                     </div>
                 </div>
                 <div class="input-group">
                     <label style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; display: block;">RTSP Username</label>
-                    <input type="text" id="tapo-user" class="form-control" value="admin" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px; border-radius: 4px; width: 100%;">
+                    <input type="text" id="tapo-user" class="form-control" value="homesecure" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px; border-radius: 4px; width: 100%;">
                 </div>
                 <div class="input-group">
                     <label style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; display: block;">RTSP Password</label>
-                    <input type="password" id="tapo-pass" class="form-control" value="••••••••" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px; border-radius: 4px; width: 100%;">
+                    <input type="password" id="tapo-pass" class="form-control" value="qwertyuiop" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px; border-radius: 4px; width: 100%;">
                 </div>
             </div>
             <div style="display: flex; gap: 12px; margin-top: 8px;">
                 <button class="btn btn-primary" id="save-tapo-config">Update Connection</button>
                 <button class="btn btn-outline" id="test-tapo-stream">Test Stream</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="settings-section">
-    <h2>Security</h2>
-    <div class="settings-group">
-        <div class="settings-item">
-            <div class="settings-info">
-                <h4>Armed Mode</h4>
-                <p>Enable or disable the primary security perimeter.</p>
-            </div>
-            <div id="settings-armed-toggle" class="toggle active"></div>
-        </div>
-        <div class="settings-item">
-            <div class="settings-info">
-                <h4>Motion Sensitivity</h4>
-                <p>Adjust how easily motion triggers an alert.</p>
-            </div>
-            <div style="width: 150px;">
-                <input type="range" min="1" max="3" value="2" class="slider" id="motion-slider">
-                <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-secondary); margin-top: 8px;">
-                    <span>Low</span>
-                    <span>Med</span>
-                    <span>High</span>
-                </div>
-            </div>
-        </div>
-        <div class="settings-item">
-            <div class="settings-info">
-                <h4>Night Vision</h4>
-                <p>Automatically switch to infrared in low light.</p>
-            </div>
-            <div class="toggle active"></div>
-        </div>
-        <div class="settings-item">
-            <div class="settings-info">
-                <h4>Two-Factor Authentication</h4>
-                <p>Extra layer of security for your account.</p>
-            </div>
-            <div class="toggle active"></div>
-        </div>
-    </div>
-</div>
-
-<div class="settings-section">
-    <h2>Notifications</h2>
-    <div class="settings-group">
-        <div class="settings-item">
-            <div class="settings-info">
-                <h4>Push Notifications</h4>
-                <p>Get instant alerts on your mobile device.</p>
-            </div>
-            <div class="toggle active"></div>
-        </div>
-        <div class="settings-item">
-            <div class="settings-info">
-                <h4>SMS Alerts</h4>
-                <p>Receive text messages for high-priority events.</p>
-            </div>
-            <div class="toggle"></div>
-        </div>
-        <div class="settings-item">
-            <div class="settings-info">
-                <h4>Email Reports</h4>
-                <p>Daily summary of security activity.</p>
-            </div>
-            <div class="toggle"></div>
-        </div>
-    </div>
-</div>
-
-<div class="settings-section">
-    <h2>System</h2>
-    <div class="settings-group">
-        <div class="settings-item">
-            <div class="settings-info">
-                <h4>Connected Device</h4>
-                <p>GuardIQ Hub v2 — Online</p>
-            </div>
-            <span class="badge badge-success">Operational</span>
-        </div>
-        <div class="settings-item">
-            <div class="settings-info">
-                <h4>Firmware</h4>
-                <p>Version v4.1.2</p>
-            </div>
-            <span style="font-size: 13px; color: var(--text-secondary);">Up to date</span>
-        </div>
-        <div class="settings-item" style="flex-direction: column; align-items: flex-start; gap: 16px;">
-            <div class="settings-info">
-                <h4>Storage Used</h4>
-                <p>Local backup and event recordings.</p>
-            </div>
-            <div style="width: 100%;">
-                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
-                    <span>18.4 GB / 64 GB</span>
-                    <span style="color: var(--text-secondary);">28%</span>
-                </div>
-                <div style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
-                    <div style="width: 28%; height: 100%; background: var(--accent);"></div>
-                </div>
             </div>
         </div>
     </div>

@@ -98,4 +98,13 @@ export const api = {
     requestPatrol() {
         return request('/patrol', { method: 'POST' });
     },
+
+    testHardware(deviceType, ip, port) {
+        // Ensure deviceType is URI encoded and path ends with trailing slash if needed by web.py
+        const encodedType = encodeURIComponent(deviceType);
+        return request(`/hardware/test/${encodedType}`, {
+            method: 'POST',
+            body: JSON.stringify({ ip, port }),
+        });
+    },
 };
