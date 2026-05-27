@@ -39,6 +39,7 @@ DEFAULT_STATE = {
     "twoFactor": True,
     "notifications": {"push": True, "sms": False, "email": False},
     "cameraStatuses": {
+        "main-indoor": "online",
         "front-door": "clear",
         "backyard": "clear",
         "garage": "clear",
@@ -46,6 +47,13 @@ DEFAULT_STATE = {
         "living-room": "clear",
         "basement": "offline",
     },
+    "tapoConfig": {
+        "ip": "192.168.1.100",
+        "username": "admin",
+        "password": "",
+        "connected": True,
+        "model": "Tapo C500"
+    }
 }
 
 system_state = deepcopy(DEFAULT_STATE)

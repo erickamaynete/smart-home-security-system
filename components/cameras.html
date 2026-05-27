@@ -6,6 +6,31 @@
 </div>
 
 <div class="camera-list">
+    <!-- Tapo C500 - Main Indoor -->
+    <div class="card camera-row" data-category="indoor" data-camera="main-indoor" data-video="https://assets.mixkit.co/videos/preview/mixkit-security-camera-view-of-a-large-living-room-34542-large.mp4">
+        <button type="button" class="thumb-box" aria-label="Open Main Indoor camera" style="background: var(--accent-light);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+        </button>
+        <div class="name-col">
+            <h4 style="font-size: 15px; font-weight: 600;">Main Indoor (Tapo C500)</h4>
+            <span style="font-size: 12px; color: var(--text-secondary);">WiFi Connection • 192.168.1.100</span>
+        </div>
+        <div class="tag-col">
+            <span class="badge badge-accent">Indoor</span>
+        </div>
+        <div class="status-col">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="status-dot" style="background-color: var(--success);"></span>
+                <span style="font-size: 14px; font-weight: 500;">Connected</span>
+            </div>
+        </div>
+        <div class="res-col" style="color: var(--text-secondary); font-size: 14px;">1080p HD</div>
+        <div class="activity-col" style="color: var(--text-secondary); font-size: 14px;">Live</div>
+        <div class="action-col">
+            <button class="btn btn-outline zoom-btn">Zoom</button>
+            <button class="btn btn-primary">View</button>
+        </div>
+    </div>
     <!-- Front Door -->
     <div class="card camera-row" data-category="outdoor" data-camera="front-door" data-video="frontdoor.mp4">
         <button type="button" class="thumb-box" aria-label="Open Front Door camera">
@@ -59,7 +84,7 @@
     </div>
 
     <!-- Garage -->
-    <div class="card camera-row" data-category="indoor" data-camera="garage" data-video="garage.mp4">
+    <div class="card camera-row" data-category="outdoor" data-camera="garage" data-video="garage.mp4">
         <button type="button" class="thumb-box" aria-label="Open Garage camera">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
         </button>
@@ -68,7 +93,7 @@
             <span style="font-size: 12px; color: var(--text-secondary);">Parking Space</span>
         </div>
         <div class="tag-col">
-            <span class="badge badge-gray">Indoor</span>
+            <span class="badge badge-gray">Outdoor</span>
         </div>
         <div class="status-col">
             <div style="display: flex; align-items: center; gap: 8px;">

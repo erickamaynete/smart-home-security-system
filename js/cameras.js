@@ -71,7 +71,7 @@ function updateTimestamps() {
  * Randomly simulate motion on one camera
  */
 function startMotionSimulation() {
-    const cameras = ['front-door', 'backyard', 'garage', 'side-gate'];
+    const cameras = ['main-indoor', 'front-door', 'backyard', 'garage', 'side-gate'];
     
     const triggerMotion = () => {
         const randomCam = cameras[Math.floor(Math.random() * cameras.length)];

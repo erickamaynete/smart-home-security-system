@@ -1,12 +1,12 @@
 <header class="view-header">
     <h1 class="view-title">System Overview</h1>
-    <p class="view-subtitle">All systems operational. 4 cameras active.</p>
+    <p class="view-subtitle">All systems operational. 5 cameras active (1 Indoor, 4 Outdoor).</p>
 </header>
 
 <div class="stat-grid">
     <div class="card stat-card">
         <span class="label">Cameras Online</span>
-        <div class="value">4/4</div>
+        <div class="value">5/5</div>
     </div>
     <div class="card stat-card">
         <span class="label">Motion Events Today</span>
@@ -23,6 +23,36 @@
 </div>
 
 <div class="camera-grid">
+    <!-- Main Indoor (Tapo C500) -->
+    <div class="card camera-feed-card" data-camera="main-indoor" data-video="https://assets.mixkit.co/videos/preview/mixkit-security-camera-view-of-a-large-living-room-34542-large.mp4">
+        <div class="feed-display">
+            <video autoplay muted loop playsinline class="feed-video">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-security-camera-view-of-a-large-living-room-34542-large.mp4" type="video/mp4">
+            </video>
+            <div class="feed-overlay-top">
+                <div class="live-indicator">
+                    <span class="dot-pulse"></span>
+                    <span class="badge badge-accent" style="background: var(--accent); color: white; padding: 2px 6px;">TAPO LIVE</span>
+                </div>
+                <span class="feed-timestamp">2026-05-13 15:50:24</span>
+            </div>
+            <div class="feed-overlay-bottom">
+                <span style="font-size: 10px; opacity: 0.8;">WiFi: 192.168.1.100</span>
+            </div>
+        </div>
+        <div class="feed-info">
+            <div>
+                <h3 style="font-size: 14px; font-weight: 600;">Main Indoor (Tapo C500)</h3>
+                <span class="badge badge-success motion-status">Clear</span>
+            </div>
+            <div class="feed-actions" style="display: flex; gap: 12px;">
+                <button class="zoom-btn" title="Zoom In">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Camera 1 -->
     <div class="card camera-feed-card" data-camera="front-door" data-video="frontdoor.mp4">
         <div class="feed-display">

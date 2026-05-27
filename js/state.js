@@ -16,12 +16,20 @@ export const state = {
         email: false
     },
     cameraStatuses: {
+        'main-indoor': 'online',
         'front-door': 'clear',
         'backyard': 'clear',
         'garage': 'clear',
         'side-gate': 'clear',
         'living-room': 'clear',
         'basement': 'offline'
+    },
+    tapoConfig: {
+        ip: '192.168.1.100',
+        username: 'admin',
+        password: '',
+        connected: true,
+        model: 'Tapo C500'
     },
     
     // Listeners for state changes

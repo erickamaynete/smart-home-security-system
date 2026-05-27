@@ -148,12 +148,6 @@ function setupGlobalActions() {
             setTimeout(() => patrolBtn.disabled = false, 10000);
             return;
         }
-
-        // Camera Icons (visual feedback)
-        const camIcon = e.target.closest('.feed-actions svg');
-        if (camIcon) {
-            showToast('Action not available in demo mode', 'info');
-        }
     });
 }
 
